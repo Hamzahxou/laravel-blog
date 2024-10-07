@@ -1,0 +1,45 @@
+<?php
+
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PembuatController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\ResepController;
+use App\Http\Controllers\TagsController;
+use Illuminate\Support\Facades\Route;
+
+require __DIR__ . '/auth.php';
+Route::get('/', fn() => redirect('/resep'));
+
+Route::get('/resep', [ResepController::class, 'index'])->name('resep.beranda');
+Route::get('/resep/{pembuat}', [PembuatController::class, 'show'])->name('resep.pembuat.view');
+Route::get('/resep/{pembuat}/{id}', [ResepController::class, 'show'])->name('resep.view');
+Route::get('/tags', [TagsController::class, 'index'])->name('resep.tags.view');
+Route::get('/tags/{tag}', [TagsController::class, 'show'])->name('resep.tag.view');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [PembuatController::class, 'index'])->name('dashboard');
+    Route::prefix('sharing')->name('resep.')->group(function () {
+        Route::get('/tambah', [ResepController::class, 'create'])->name('tambah');
+        Route::post('/tambah', [ResepController::class, 'store'])->name('simpan');
+        Route::get('/{id}/edit', [ResepController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [ResepController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ResepController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::post('resep/{id}/comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::delete('resep/{id}/comment', [CommentController::class, 'destroy'])->name('comment.delete');
+    Route::put('resep/{id}/comment/update', [CommentController::class, 'update'])->name('comment.update');
+
+    Route::post('resep/reply/{id}/comment', [ReplyController::class, 'store'])->name('comment.reply.store');
+    Route::delete('resep/reply/{id}/comment', [ReplyController::class, 'destroy'])->name('comment.reply.delete');
+    Route::put('resep/reply/{id}/comment/update', [ReplyController::class, 'update'])->name('comment.reply.update');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});

@@ -17,4 +17,8 @@ class Reply extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function parentReply()
+    {
+        return $this->belongsTo(Reply::class, 'parent_reply_id');
+    }
 }

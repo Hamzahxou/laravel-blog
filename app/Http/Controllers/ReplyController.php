@@ -15,9 +15,13 @@ class ReplyController extends Controller
             'comment_id' => 'required',
             'comment' => 'required'
         ]);
+        // dd($request->reply);
+        // die();
+
         $resep = Comments::findOrFail($request->comment_id);
         Reply::create([
             'user_id' => Auth::user()->id,
+            'parent_reply_id' => $request->reply ?? null,
             'comment_id' => $request->comment_id,
             'content' => $request->comment
         ]);

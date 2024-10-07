@@ -116,7 +116,7 @@ class ResepController extends Controller
      */
     public function show(string $pembuat, string $id)
     {
-        $getResep = Resep::findOrFail($id)->load('comment.user:id,username', 'comment.replies.user:id,username', 'user:id,username', 'tagItems.tag');
+        $getResep = Resep::findOrFail($id)->load('comment.user:id,username', 'comment.replies.user:id,username', 'comment.replies.parentReply.user:id,username', 'user:id,username', 'tagItems.tag');
         // return response()->json($getResep);
         $jumlah_reply = 0;
         foreach ($getResep->comment as $comment) {
@@ -124,7 +124,6 @@ class ResepController extends Controller
         }
         $jumlah_komentar = $getResep->comment->count() + $jumlah_reply;
 
-        // return response()->json($jumlah_reply);
         return view('view-resep', compact('getResep', 'jumlah_komentar'));
     }
 
@@ -191,39 +190,37 @@ class ResepController extends Controller
 
         // 1. Hapus tag lama yang tidak ada di input baru
         $tagsUntukDihapus = array_diff($tagsLama, $tagsBaru);
-        if ($tagsUntukDihapus) {
-            foreach ($tagsUntukDihapus as $tagHapus) {
-                $tagTerdaftar = Tags::where('nama_tag', $tagHapus)->first();
-                if ($tagTerdaftar) {
-                    TagItems::where('resep_id', $getResep->id)
-                        ->where('tag_id', $tagTerdaftar->id)
-                        ->delete();
-                }
+        foreach ($tagsUntukDihapus as $tagHapus) {
+            $tagTerdaftar = Tags::where('nama_tag', $tagHapus)->first();
+            if ($tagTerdaftar) {
+                TagItems::where('resep_id', $getResep->id)
+                    ->where('tag_id', $tagTerdaftar->id)
+                    ->delete();
+            }
+        }
+
+        // 2. Tambahkan tag baru yang belum ada di database
+        foreach ($tagsBaru as $tagBaru) {
+            $tagTerdaftar = Tags::where('nama_tag', $tagBaru)->first();
+
+            // Jika tag belum ada, buat tag baru
+            if (!$tagTerdaftar) {
+                $tagTerdaftar = Tags::create([
+                    'nama_tag' => $tagBaru,
+                ]);
             }
 
-            // 2. Tambahkan tag baru yang belum ada di database
-            foreach ($tagsBaru as $tagBaru) {
-                $tagTerdaftar = Tags::where('nama_tag', $tagBaru)->first();
+            // Cek apakah tag sudah terdaftar di TagItems untuk resep ini
+            $tagItem = TagItems::where('resep_id', $getResep->id)
+                ->where('tag_id', $tagTerdaftar->id)
+                ->first();
 
-                // Jika tag belum ada, buat tag baru
-                if (!$tagTerdaftar) {
-                    $tagTerdaftar = Tags::create([
-                        'nama_tag' => $tagBaru,
-                    ]);
-                }
-
-                // Cek apakah tag sudah terdaftar di TagItems untuk resep ini
-                $tagItem = TagItems::where('resep_id', $getResep->id)
-                    ->where('tag_id', $tagTerdaftar->id)
-                    ->first();
-
-                // Jika belum, tambahkan ke TagItems
-                if (!$tagItem) {
-                    TagItems::create([
-                        'resep_id' => $getResep->id,
-                        'tag_id' => $tagTerdaftar->id,
-                    ]);
-                }
+            // Jika belum, tambahkan ke TagItems
+            if (!$tagItem) {
+                TagItems::create([
+                    'resep_id' => $getResep->id,
+                    'tag_id' => $tagTerdaftar->id,
+                ]);
             }
         }
         return redirect()->route('dashboard')->with('success', 'Resep berhasil ditambahkan');

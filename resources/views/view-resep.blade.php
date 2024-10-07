@@ -143,7 +143,8 @@
                     @endauth
                 </article>
                 @foreach ($comment->replies as $reply)
-                    <article class="p-6 text-base bg-white rounded-lg mb-4 mb-3 ml-6 lg:ml-12">
+                    <article class="p-6 text-base bg-white rounded-lg mb-4 mb-3 ml-6 lg:ml-12 relative"
+                        data-idReply="{{ $reply->id }}">
                         <div class="flex justify-between items-center mb-1">
                             <div class="flex items-center">
                                 <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
@@ -153,9 +154,29 @@
                                     {{ $reply->user->username }}
                                     @if ($reply->user->id == $getResep->user->id)
                                         <span
-                                            class="ms-2 bg-slate-800 text-slate-100 text-xs font-medium me-2 px-3 py-1 rounded">Pemilik</span>
+                                            class="ms-2 bg-slate-800 text-slate-100 text-xs font-medium px-3 py-1 rounded">Pemilik</span>
                                     @endif
-
+                                    @if ($reply->parent_reply_id)
+                                        <div class="flex items-center cursor-pointer me-2"
+                                            onclick="showReply({{ $reply->parent_reply_id }})">
+                                            <div class="w-5 h-5">
+                                                <svg viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                    </g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path
+                                                            d="M19.5 12L14.5 7M19.5 12L14.5 17M19.5 12L9.5 12C7.83333 12 4.5 13 4.5 17"
+                                                            stroke="#1C274C" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            {{ $reply->parentReply->user->username }}
+                                        </div>
+                                    @endif
                                 </p>
                                 <p class="text-sm text-gray-600 "><time pubdate datetime="2022-02-08"
                                         title="February 8th, 2022">{{ $reply->created_at->isoFormat('dddd, D MMM YYYY') }}</time>
@@ -200,7 +221,21 @@
                             @endif
                         </div>
                         <p class="text-gray-500 ">{{ $reply->content }}</p>
-
+                        @auth
+                            <div class="flex items-center mt-4 space-x-4">
+                                <button type="button"
+                                    onclick="reply(this.parentElement.parentElement, '{{ route('comment.reply.store', $getResep->id) }}', '{{ $comment->id }}', {{ $reply->id }})"
+                                    class="flex items-center text-sm text-gray-500 hover:underline font-medium">
+                                    <svg class="mr-1.5 w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 20 18">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
+                                    </svg>
+                                    Balas
+                                </button>
+                            </div>
+                        @endauth
                     </article>
                 @endforeach
             @endforeach
@@ -239,12 +274,13 @@
                 }
             }
 
-            function templateForm(route, id) {
+            function templateForm(route, id, reply) {
                 return `
                 <article id="reply">
                     <form class="mb-6" action="${route}" method="post">
                         @csrf
                         <input type="hidden" name="comment_id" value="${id}"/>
+                        <input type="hidden" name="reply" value="${reply}"/>
                         <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 ">
                           <label for="comment" class="sr-only">Komentar</label>
                           <textarea id="comment" rows="6" class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none  " placeholder="Balas Komentar..." required name="comment"></textarea>
@@ -258,11 +294,27 @@
                 `
             }
 
-            function reply(el, route, id) {
+            function reply(el, route, id, reply = '') {
                 if (document.getElementById("reply")) {
                     document.getElementById("reply").remove();
                 }
-                el.insertAdjacentHTML("afterend", templateForm(route, id));
+                el.insertAdjacentHTML("afterend", templateForm(route, id, reply));
+            }
+
+            const templateReplyShow = `
+                        <div class="w-2 bg-slate-500 absolute top-0 bottom-0 -left-5" id="replyShow"></div>`
+            const data_idReply = document.querySelectorAll('[data-idReply]');
+
+            function showReply(id) {
+                const replyShow = document.getElementById("replyShow");
+                if (replyShow) {
+                    replyShow.remove();
+                }
+                data_idReply.forEach(el => {
+                    if (el.getAttribute('data-idReply') == id) {
+                        el.insertAdjacentHTML("afterbegin", templateReplyShow);
+                    }
+                });
             }
         </script>
     @endpush

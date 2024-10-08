@@ -16,12 +16,12 @@
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
-        {{-- <div>
+        <div>
             @isset($user->avatar)
-                <img src="{{ asset('assets/profile/' . $user->avatar) }}" alt="" class="mr-2 w-6 h-6 rounded-full"
+                <img src="{{ asset('storage/' . $user->avatar) }}" alt="" class="mr-2 w-32 h-32 rounded-full"
                     id="preview">
             @else
-                <img src="{{ asset('assets/profile/default-profile.png') }}" alt=""
+                <img src="{{ asset('storage/profile/default-profile.png') }}" alt=""
                     class="mr-2 w-32 h-32 rounded-full" id="preview">
             @endisset
         </div>
@@ -32,7 +32,7 @@
                 class="mt-1 p-2 block w-full border  border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none focus:border-2"
                 :value="old('avatar', $user->avatar)" accept="image/*" onchange="ImgPreview(this)" />
             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
-        </div> --}}
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />

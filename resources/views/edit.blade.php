@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="{{ __('Edit Resep') }}">
 
     @push('styles')
         <style>

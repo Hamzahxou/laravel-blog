@@ -26,10 +26,25 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        // dd($request->all());
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
+        }
+
+        if ($request->has('avatar')) {
+            $request->validate([
+                'avatar' => ['required', 'mimes:png,jpg,jpeg'],
+            ]);
+            if ($request->old_avatar != null) {
+                if (file_exists(public_path('storage/' . $request->old_avatar))) {
+                    unlink(public_path('storage/' . $request->old_avatar));
+                }
+            }
+            $path = $request->file('avatar')->store('avatars', 'public');
+            // dd($path);
+            $request->user()->avatar = $path;
         }
 
         $request->user()->save();

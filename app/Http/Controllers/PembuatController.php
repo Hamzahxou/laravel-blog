@@ -13,11 +13,20 @@ class PembuatController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->q || $request->status) {
-            $getReseps = Resep::query()->where('user_id', Auth::user()->id)->where('nama_resep', 'LIKE %' . $request->q . '%')->orWhere('status', $request->status)->orderBy('created_at', 'desc')->get();
-        } else {
-            $getReseps = Resep::query()->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $getReseps = Resep::where('user_id', Auth::user()->id);
+
+        if ($request->q) {
+            $getReseps->where('nama_resep', 'LIKE', '%' . $request->q . '%');
         }
+
+        if ($request->status) {
+            $getReseps->where('status', $request->status);
+        }
+
+        $getReseps = $getReseps->orderBy('created_at', 'desc')->get(['id', 'gambar', 'nama_resep', 'status',  'created_at']);
+
+        // return response()->json($getReseps);
+
         return view('dashboard', compact('getReseps'));
     }
 
@@ -42,7 +51,7 @@ class PembuatController extends Controller
      */
     public function show(string $pembuat)
     {
-        $getReseps = Resep::query()->with('user:id,username')->whereHas('user', function ($query) use ($pembuat) {
+        $getReseps = Resep::query()->where('status', 'publish')->with('user:id,username')->whereHas('user', function ($query) use ($pembuat) {
             $query->where('username', $pembuat);
         })->get();
         // return response()->json(count($getReseps));

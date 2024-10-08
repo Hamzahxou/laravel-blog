@@ -70,14 +70,21 @@
                             type="submit">{{ __('Kirim') }}</x-secondary-button></div>
                 </form>
             @endauth
+            {{-- @dd($getResep->comment) --}}
             @foreach ($getResep->comment as $comment)
                 <article class="p-6 text-base bg-white rounded-lg mb-4">
                     <div class="flex justify-between items-center mb-1">
                         <div class="flex items-center">
                             <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
-                                {{-- <img class="mr-2 w-6 h-6 rounded-full"
-                                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                                    alt="Michael Gough"> --}}
+                                @if ($comment->user->avatar)
+                                    <img class="mr-2 w-6 h-6 rounded-full"
+                                        src="{{ asset('storage/' . $comment->user->avatar) }}"
+                                        alt=" {{ $comment->user->username }}">
+                                @else
+                                    <img class="mr-2 w-6 h-6 rounded-full"
+                                        src="{{ asset('storage/profile/default-profile.png') }}"
+                                        alt=" {{ $comment->user->username }}">
+                                @endif
                                 {{ $comment->user->username }}
                                 @if ($comment->user->id == $getResep->user->id)
                                     <span
@@ -148,9 +155,15 @@
                         <div class="flex justify-between items-center mb-1">
                             <div class="flex items-center">
                                 <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
-                                    {{-- <img class="mr-2 w-6 h-6 rounded-full"
-                                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                                    alt="Michael Gough"> --}}
+                                    @if ($reply->user->avatar)
+                                        <img class="mr-2 w-6 h-6 rounded-full"
+                                            src="{{ asset('storage/' . $reply->user->avatar) }}"
+                                            alt=" {{ $reply->user->username }}">
+                                    @else
+                                        <img class="mr-2 w-6 h-6 rounded-full"
+                                            src="{{ asset('storage/profile/default-profile.png') }}"
+                                            alt=" {{ $reply->user->username }}">
+                                    @endif
                                     {{ $reply->user->username }}
                                     @if ($reply->user->id == $getResep->user->id)
                                         <span
@@ -301,8 +314,8 @@
                 el.insertAdjacentHTML("afterend", templateForm(route, id, reply));
             }
 
-            const templateReplyShow = `
-                        <div class="w-2 bg-slate-500 absolute top-0 bottom-0 -left-5" id="replyShow"></div>`
+            const templateReplyShow =
+                `<div class="w-2 bg-slate-500 absolute top-0 bottom-0 -left-5 animate-pulse" id="replyShow"></div>`
             const data_idReply = document.querySelectorAll('[data-idReply]');
 
             function showReply(id) {

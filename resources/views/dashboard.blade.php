@@ -69,7 +69,21 @@
                                             class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">
                                             {{ $resep->created_at->isoFormat('dddd, D MMMM YYYY') }}</td>
                                         <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">
-                                            {{ $resep->status }}</td>
+                                            <form action="{{ route('resep.status.update', $resep->id) }}"
+                                                method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <select name="status" onchange="form.submit()"
+                                                    class="border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 loadingOther ">
+                                                    <option value="draft"
+                                                        {{ $resep->status == 'draft' ? 'selected' : '' }}>Draft
+                                                    </option>
+                                                    <option value="publish"
+                                                        {{ $resep->status == 'publish' ? 'selected' : '' }}>publish
+                                                    </option>
+                                                </select>
+                                            </form>
+                                        </td>
                                         <td class="border px-6 py-4">
                                             <div class="flex justify-center gap-2">
                                                 <a href='{{ route('resep.edit', $resep->id) }}'

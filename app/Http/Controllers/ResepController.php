@@ -116,7 +116,10 @@ class ResepController extends Controller
      */
     public function show(string $pembuat, string $id)
     {
-        $getResep = Resep::findOrFail($id)->load('comment.user:id,username', 'comment.replies.user:id,username', 'comment.replies.parentReply.user:id,username', 'user:id,username', 'tagItems.tag');
+        $getResep = Resep::findOrFail($id)->load('comment.user:id,username,avatar', 'comment.replies.user:id,username,avatar', 'comment.replies.parentReply.user:id,username,avatar', 'user:id,username', 'tagItems.tag',);
+        if ($getResep->status == 'draft' && Auth::user()->id != $getResep->user->id) {
+            return abort(404, 'Resep tidak ditemukan');
+        }
         // return response()->json($getResep);
         $jumlah_reply = 0;
         foreach ($getResep->comment as $comment) {
@@ -234,5 +237,14 @@ class ResepController extends Controller
         $getResep = Resep::where('id', $id)->where('user_id', Auth::user()->id)->first();
         $getResep->delete();
         return redirect()->route('dashboard')->with('success', 'Resep berhasil dihapus');
+    }
+
+    public function status(Request $request, string $id)
+    {
+        $getResep = Resep::where('id', $id)->where('user_id', Auth::user()->id)->first();
+        $getResep->update([
+            'status' => $request->status
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Resep berhasil diubah status');
     }
 }

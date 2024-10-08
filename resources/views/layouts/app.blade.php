@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('storage/assets/logo/logo.png') }}">
 
     <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
 
@@ -84,6 +85,18 @@
         if (listLink) {
             listLink.forEach(link => {
                 link.addEventListener('click', function() {
+                    body.insertAdjacentHTML('beforeend', loadingTemplate);
+                    setTimeout(() => {
+                        removeLoading();
+                    }, 2000);
+                });
+            });
+        }
+
+        const loadingOther = document.querySelectorAll('.loadingOther');
+        if (loadingOther) {
+            loadingOther.forEach(el => {
+                el.addEventListener('change', function() {
                     body.insertAdjacentHTML('beforeend', loadingTemplate);
                     setTimeout(() => {
                         removeLoading();

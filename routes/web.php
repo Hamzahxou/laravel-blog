@@ -9,7 +9,7 @@ use App\Http\Controllers\TagsController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
-Route::get('/', fn() => redirect('/resep'));
+Route::get('/', fn() => redirect('resep'));
 
 Route::get('/resep', [ResepController::class, 'index'])->name('resep.beranda');
 Route::get('/resep/{pembuat}', [PembuatController::class, 'show'])->name('resep.pembuat.view');
@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [ResepController::class, 'edit'])->name('edit');
         Route::put('/{id}/update', [ResepController::class, 'update'])->name('update');
         Route::delete('/{id}', [ResepController::class, 'destroy'])->name('destroy');
+        Route::put('/{id}/status', [ResepController::class, 'status'])->name('status.update');
     });
 
     Route::post('resep/{id}/comment', [CommentController::class, 'store'])->name('comment.store');

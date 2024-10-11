@@ -8,6 +8,7 @@ use App\Http\Controllers\ResepController;
 use App\Http\Controllers\TagsController;
 use Illuminate\Support\Facades\Route;
 
+
 require __DIR__ . '/auth.php';
 Route::get('/', fn() => redirect('resep'));
 

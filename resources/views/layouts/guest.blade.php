@@ -28,7 +28,66 @@
             {{ $slot }}
         </div>
     </div>
+
+    <script>
+        const loadingTemplate = `
+   <div id="loading"
+        class="bg-gray-100 fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center space-x-2 event-none select-none">
+        <div class="w-4 h-4 rounded-full animate-pulse bg-gray-800"></div>
+        <div class="w-4 h-4 rounded-full animate-pulse bg-gray-800"></div>
+        <div class="w-4 h-4 rounded-full animate-pulse bg-gray-800"></div>
+    </div>`
+
+        const body = document.body
+        body.insertAdjacentHTML('beforeend', loadingTemplate);
+        window.addEventListener('load', function() {
+            removeLoading();
+        });
+        const btnSubmit = document.querySelectorAll('button[type="submit"]');
+        if (btnSubmit) {
+            btnSubmit.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    body.insertAdjacentHTML('beforeend', loadingTemplate);
+                    setTimeout(() => {
+                        removeLoading();
+                    }, 5000);
+                });
+            });
+        }
+
+        const listLink = document.querySelectorAll('a');
+        if (listLink) {
+            listLink.forEach(link => {
+                link.addEventListener('click', function() {
+                    body.insertAdjacentHTML('beforeend', loadingTemplate);
+                    setTimeout(() => {
+                        removeLoading();
+                    }, 5000);
+                });
+            });
+        }
+
+        const loadingOther = document.querySelectorAll('.loadingOther');
+        if (loadingOther) {
+            loadingOther.forEach(el => {
+                el.addEventListener('change', function() {
+                    body.insertAdjacentHTML('beforeend', loadingTemplate);
+                    setTimeout(() => {
+                        removeLoading();
+                    }, 5000);
+                });
+            });
+        }
+
+        function removeLoading() {
+            const body = document.body;
+            body.removeChild(document.getElementById('loading'));
+        }
+    </script>
+
     @stack('scripts')
+
+
 </body>
 
 </html>

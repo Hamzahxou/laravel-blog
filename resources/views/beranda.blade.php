@@ -22,8 +22,7 @@
 
     <!-- component -->
     <!-- This is an example component -->
-    @if ($getLatestReseps ?? false)
-
+    @isset($getLatestReseps)
         <div class="w-full mx-auto">
             <div id="default-carousel" class="relative" data-carousel="static">
                 <!-- Carousel wrapper -->
@@ -32,7 +31,7 @@
                         <div class="hidden duration-700 ease-in-out" data-carousel-item>
                             <img src="{{ asset('storage/assets/gambar/' . $resepLatest->gambar) }}"
                                 class="block absolute w-full h-full object-cover object-center" alt="...">
-
+                            {{-- block absolute w-full h-full object-cover object-center --}}
                             <div class="absolute bottom-0 left-0 right-0 flex justify-center items-center">
                                 <a class="mb-10 text-center inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
                                     href="{{ route('resep.view', ['pembuat' => 'hamzahxou', 'id' => $resepLatest->id]) }}">
@@ -41,6 +40,16 @@
                             </div>
                         </div>
                     @endforeach
+                    {{-- <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                        <img src="{{ asset('storage/assets/gambar/1727586358_tumis-tempe-kecap-manis-1-510x306.jpg') }}"
+                            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                        <div class="absolute bottom-0 left-0 right-0 flex justify-center items-center">
+                            <a class="mb-10 text-center inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                                href="3">
+                                Lihat Resep
+                            </a>
+                        </div>
+                    </div> --}}
                 </div>
                 <!-- Slider controls -->
                 <button type="button"
@@ -71,8 +80,7 @@
                 </button>
             </div>
         </div>
-
-    @endif
+    @endisset
 
 
 

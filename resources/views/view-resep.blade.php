@@ -66,9 +66,17 @@
                             class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none  " placeholder="Komentar..."
                             required name="comment"></textarea>
                     </div>
-                    <div class="flex justify-end"> <x-secondary-button
-                            type="submit">{{ __('Kirim') }}</x-secondary-button></div>
+                    <div class="flex justify-end">
+                        <x-secondary-button type="submit">{{ __('Kirim') }}</x-secondary-button>
+                    </div>
                 </form>
+            @else
+                <div
+                    class="mb-6 border border-dashed border-slate-600 bg-gray-100 w-full h-32 rounded-md flex justify-center items-center flex-col gap-2">
+                    <p class="text-slate-600">Login untuk memulai komentar</p>
+                    <a href="{{ route('login') }}"
+                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">Login</a>
+                </div>
             @endauth
             {{-- @dd($getResep->comment) --}}
             @foreach ($getResep->comment as $comment)
@@ -125,7 +133,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <input type="hidden" name="comment_id" value="{{ $comment->id }}">
-                                        <button type="submit"
+                                        <button type="submit" onclick="hapusCommenConfim()"
                                             class="block w-full text-start px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Hapus</button>
                                     </form>
                                 </div>
@@ -226,7 +234,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="reply_id" value="{{ $reply->id }}">
-                                            <button type="submit"
+                                            <button type="submit" onclick="hapusCommenConfim()"
                                                 class="block w-full text-start px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Hapus</button>
                                         </form>
                                     </div>
@@ -256,6 +264,26 @@
     </section>
     @push('scripts')
         <script>
+            function hapusCommenConfim() {
+                event.preventDefault();
+                let form = event.target.form;
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Ini akan menghapus komentar ini",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#333',
+                    cancelButtonColor: '#c3c3c3',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+
+
             async function editComment() {
                 event.preventDefault();
                 let form = event.target.form;

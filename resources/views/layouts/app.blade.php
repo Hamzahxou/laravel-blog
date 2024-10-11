@@ -69,14 +69,15 @@
         window.addEventListener('load', function() {
             removeLoading();
         });
-        const btnSubmit = document.querySelectorAll('button[type="submit"]');
+        const btnSubmit = Array.from(document.querySelectorAll('button[type="submit"]')).filter(btn => !btn
+            .hasAttribute('onclick'));
         if (btnSubmit) {
             btnSubmit.forEach(btn => {
                 btn.addEventListener('click', function() {
                     body.insertAdjacentHTML('beforeend', loadingTemplate);
                     setTimeout(() => {
                         removeLoading();
-                    }, 2000);
+                    }, 3000);
                 });
             });
         }
@@ -88,7 +89,7 @@
                     body.insertAdjacentHTML('beforeend', loadingTemplate);
                     setTimeout(() => {
                         removeLoading();
-                    }, 2000);
+                    }, 3000);
                 });
             });
         }
@@ -100,7 +101,7 @@
                     body.insertAdjacentHTML('beforeend', loadingTemplate);
                     setTimeout(() => {
                         removeLoading();
-                    }, 2000);
+                    }, 3000);
                 });
             });
         }

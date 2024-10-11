@@ -245,6 +245,6 @@ class ResepController extends Controller
         $getResep->update([
             'status' => $request->status
         ]);
-        return redirect()->route('dashboard')->with('success', 'Resep berhasil diubah status');
+        return redirect()->route('dashboard')->with('success', 'Status Resep berhasil diubah');
     }
 }

@@ -6,7 +6,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ResepController;
 use App\Http\Controllers\TagsController;
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
+
 
 
 require __DIR__ . '/auth.php';
@@ -44,4 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::middleware(Admin::class)->group(function () {
+        Route::get('Tags', [TagsController::class, 'view'])->name('tags.view');
+        Route::put('Tags/{id}', [TagsController::class, 'update'])->name('tags.update');
+        Route::delete('Tags/{id}', [TagsController::class, 'destroy'])->name('tags.destroy');
+        Route::post('Tags', [TagsController::class, 'store'])->name('tags.store');
+    });
 });

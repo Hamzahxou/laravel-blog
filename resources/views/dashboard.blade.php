@@ -55,8 +55,11 @@
                                     <tr>
                                         <td class="border px-6 py-4 text-center">{{ $loop->iteration }}</td>
                                         <td class="border px-6 py-4 hidden lg:table-cell">
-                                            <img src="{{ asset('storage/assets/gambar/' . $resep->gambar) }}"
-                                                class="w-16 md:w-32 max-w-full max-h-full" alt="nasi goreng rendang">
+                                            <div class="w-32 h-20 mx-auto">
+                                                <img src="{{ asset('storage/assets/gambar/' . $resep->gambar) }}"
+                                                    class="w-full h-full md:w-32 max-w-full max-h-full"
+                                                    alt="nasi goreng rendang">
+                                            </div>
                                         </td>
                                         <td class="border px-6 py-4">
                                             {{ $resep->nama_resep }}
@@ -192,8 +195,8 @@
                     text: "ingin menghapus item ini!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
+                    confirmButtonColor: "#333",
+                    cancelButtonColor: "#c3c3c3",
                     confirmButtonText: "Ya, Hapus!",
                     cancelButtonText: "Batal",
                 }).then((result) => {

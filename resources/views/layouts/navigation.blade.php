@@ -24,6 +24,11 @@
                         <x-nav-link :href="route('resep.tambah')" :active="request()->routeIs('resep.tambah')">
                             {{ __('Tambah Resep') }}
                         </x-nav-link>
+                        @if (auth()->user()->role == 'admin')
+                            <x-nav-link :href="route('tags.view')" :active="request()->routeIs('tags.view')">
+                                {{ __('Tags') }}
+                            </x-nav-link>
+                        @endif
                     @else
                         <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
                             {{ __('Login') }}
@@ -123,6 +128,11 @@
                 <x-responsive-nav-link :href="route('resep.tambah')" :active="request()->routeIs('resep.tambah')">
                     {{ __('Tambah Resep') }}
                 </x-responsive-nav-link>
+                @if (auth()->user()->role == 'admin')
+                    <x-responsive-nav-link :href="route('tags.view')" :active="request()->routeIs('tags.view')">
+                        {{ __('Tags') }}
+                    </x-responsive-nav-link>
+                @endif
             @else
                 <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
                     {{ __('Login') }}

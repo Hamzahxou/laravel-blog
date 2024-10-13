@@ -85,7 +85,7 @@
 
 
     <!-- component -->
-    <div class="flex justify-center items-center py-12 flex-wrap mx-auto gap-2">
+    <div class="flex justify-center items-center pt-12 flex-wrap mx-auto gap-2 mb-3">
         <!-- Centering wrapper -->
         @if (count($getReseps) > 0)
             @foreach ($getReseps as $resep)
@@ -130,4 +130,12 @@
             <h1 class="text-slate-600 text-large">Tidak ada resep</h1>
         @endif
     </div>
+    @if (count($getReseps) > 0)
+        <div class="flex justify-center items-center pb-12 flex-wrap mx-auto gap-2">
+            <form action="{{ route('resep.beranda') }}" method="GET">
+                <input type="hidden" name="per_page" value="{{ $getReseps->count() + 2 }}">
+                <x-primary-button type="submit">Tampilkan lebih banyak</x-primary-button>
+            </form>
+        </div>
+    @endif
 </x-app-layout>

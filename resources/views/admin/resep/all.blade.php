@@ -1,7 +1,7 @@
-<x-app-layout title="Daftar Resep Anda">
+<x-app-layout title="Daftar Resep User">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Daftar Resep Anda') }}
+            {{ __('Daftar Resep User') }}
         </h2>
     </x-slot>
 
@@ -24,6 +24,15 @@
                                     placeholder="Cari resep" value="{{ request()->q }}" />
                             </div>
                             <select
+                                name="user"class="border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 ">
+                                <option value="" selected disabled>Users</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ request()->user == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                            <select
                                 name="status"class="border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 ">
                                 <option value="" {{ request()->status == '' ? 'selected' : '' }}>
                                     Semua</option>
@@ -41,6 +50,7 @@
                         <thead>
                             <tr class="text-center font-bold">
                                 <td class="border px-6 py-4 w-[80px]">No</td>
+                                <td class="border px-6 py-4">Username</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Gambar</td>
                                 <td class="border px-6 py-4">Judul</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal</td>
@@ -55,6 +65,8 @@
                                     <tr>
                                         <td class="border px-6 py-4 text-center">
                                             {{ $getReseps->firstItem() + $loop->index }}</td>
+                                        <td class="border px-6 py-4">
+                                            {{ $resep->user->username }}</td>
                                         <td class="border px-6 py-4 hidden lg:table-cell">
                                             <div class="w-32 h-20 mx-auto">
                                                 <img src="{{ asset('storage/assets/gambar/' . $resep->gambar) }}"
@@ -63,7 +75,7 @@
                                             </div>
                                         </td>
                                         <td class="border px-6 py-4">
-                                            {{ $resep->nama_resep }}
+                                            <p> {{ $resep->nama_resep }}</p>
                                             <div class="block lg:hidden text-sm text-gray-500">
                                                 {{ $resep->status }} |
                                                 {{ $resep->created_at->isoFormat('dddd, D MMMM YYYY') }}
@@ -73,8 +85,7 @@
                                             class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">
                                             {{ $resep->created_at->isoFormat('dddd, D MMMM YYYY') }}</td>
                                         <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">
-                                            <form action="{{ route('resep.status.update', $resep->id) }}"
-                                                method="post">
+                                            <form action="{{ route('all_reseps.update', $resep->id) }}" method="post">
                                                 @csrf
                                                 @method('PUT')
                                                 <select name="status" onchange="form.submit()"
@@ -90,7 +101,7 @@
                                         </td>
                                         <td class="border px-6 py-4">
                                             <div class="flex justify-center gap-2">
-                                                <a href='{{ route('resep.edit', $resep->id) }}'
+                                                {{-- <a href=''
                                                     class="block text-blue-600 hover:text-blue-400">
                                                     <div class="w-5 h-5">
                                                         <svg viewBox="0 0 24 24" fill="none"
@@ -113,7 +124,7 @@
                                                             </g>
                                                         </svg>
                                                     </div>
-                                                </a>
+                                                </a> --}}
                                                 <a href='{{ route('resep.view', ['pembuat' => auth()->user()->username, 'id' => $resep->id]) }}'
                                                     class="block text-blue-600 hover:text-blue-400">
                                                     <div class="w-5 h-5">
@@ -135,8 +146,8 @@
                                                         </svg>
                                                     </div>
                                                 </a>
-                                                <form action="{{ route('resep.destroy', $resep->id) }}" method="post"
-                                                    class="flex justify-center align-center">
+                                                <form action="{{ route('all_reseps.destroy', $resep->id) }}"
+                                                    method="post" class="flex justify-center align-center">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="block"
@@ -177,7 +188,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <th colspan="6" class="border px-6 py-4">Tidak ada resep</th>
+                                    <th colspan="7" class="border px-6 py-4">Tidak ada resep</th>
                                 </tr>
                             @endif
                         </tbody>

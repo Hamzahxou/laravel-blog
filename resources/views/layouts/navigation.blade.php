@@ -25,6 +25,12 @@
                             {{ __('Tambah Resep') }}
                         </x-nav-link>
                         @if (auth()->user()->role == 'admin')
+                            <x-nav-link :href="route('admin_users.index')" :active="request()->routeIs('admin_users.index')">
+                                {{ __('Users') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('all_reseps.index')" :active="request()->routeIs('all_reseps.index')">
+                                {{ __('All Reseps') }}
+                            </x-nav-link>
                             <x-nav-link :href="route('tags.view')" :active="request()->routeIs('tags.view')">
                                 {{ __('Tags') }}
                             </x-nav-link>
@@ -88,9 +94,7 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
 
-                                <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                <x-dropdown-link :href="route('logout')" onclick="confirmLogout(event)">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
@@ -129,6 +133,12 @@
                     {{ __('Tambah Resep') }}
                 </x-responsive-nav-link>
                 @if (auth()->user()->role == 'admin')
+                    <x-responsive-nav-link :href="route('admin_users.index')" :active="request()->routeIs('admin_users.index')">
+                        {{ __('Users') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('all_reseps.index')" :active="request()->routeIs('all_reseps.index')">
+                        {{ __('All Reseps') }}
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('tags.view')" :active="request()->routeIs('tags.view')">
                         {{ __('Tags') }}
                     </x-responsive-nav-link>
@@ -160,9 +170,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
-                        <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                        <x-responsive-nav-link :href="route('logout')" onclick="confirmLogout(event)">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </form>

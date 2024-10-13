@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AllResepController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PembuatController;
 use App\Http\Controllers\ProfileController;
@@ -7,22 +8,17 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ResepController;
 use App\Http\Controllers\TagsController;
 use App\Http\Middleware\Admin;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
-
-
 require __DIR__ . '/auth.php';
-Route::get('/', fn() => redirect('resep'));
 
+Route::get('/', fn() => redirect('resep'));
 Route::get('/resep', [ResepController::class, 'index'])->name('resep.beranda');
 Route::get('/resep/{pembuat}', [PembuatController::class, 'show'])->name('resep.pembuat.view');
 Route::get('/resep/{pembuat}/{id}', [ResepController::class, 'show'])->name('resep.view');
 Route::get('/tags', [TagsController::class, 'index'])->name('resep.tags.view');
 Route::get('/tags/{tag}', [TagsController::class, 'show'])->name('resep.tag.view');
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PembuatController::class, 'index'])->name('dashboard');
@@ -52,5 +48,9 @@ Route::middleware('auth')->group(function () {
         Route::put('Tags/{id}', [TagsController::class, 'update'])->name('tags.update');
         Route::delete('Tags/{id}', [TagsController::class, 'destroy'])->name('tags.destroy');
         Route::post('Tags', [TagsController::class, 'store'])->name('tags.store');
+
+        Route::resource('admin_users', UsersController::class);
+
+        Route::resource('all_reseps', AllResepController::class);
     });
 });

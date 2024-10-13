@@ -1,7 +1,7 @@
-<x-app-layout title="Daftar Resep Anda">
+<x-app-layout title="Daftar User">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Daftar Resep Anda') }}
+            {{ __('Daftar User') }}
         </h2>
     </x-slot>
 
@@ -9,6 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg overflow-x-auto">
                 <div class="p-6 bg-white border-b border-gray-200">
+
+                    <div class="flex justify-end items-center mb-2">
+
+                        <a href="{{ route('admin_users.create') }}"
+                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('tambah user') }}
+                        </a>
+                    </div>
                     <form class="w-full">
                         <div class="flex gap-2 items-center">
                             <div class="relative w-full">
@@ -21,17 +29,8 @@
                                 </div>
                                 <input type="search" name="q" id="default-search"
                                     class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                                    placeholder="Cari resep" value="{{ request()->q }}" />
+                                    placeholder="Cari user" value="{{ request()->q }}" />
                             </div>
-                            <select
-                                name="status"class="border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 ">
-                                <option value="" {{ request()->status == '' ? 'selected' : '' }}>
-                                    Semua</option>
-                                <option value="draft" {{ request()->status == 'draft' ? 'selected' : '' }}>
-                                    Draft</option>
-                                <option value="publish" {{ request()->status == 'publish' ? 'selected' : '' }}>
-                                    publish</option>
-                            </select>
                             <x-primary-button type="submit">cari</x-primary-button>
                         </div>
                     </form>
@@ -41,56 +40,43 @@
                         <thead>
                             <tr class="text-center font-bold">
                                 <td class="border px-6 py-4 w-[80px]">No</td>
-                                <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Gambar</td>
-                                <td class="border px-6 py-4">Judul</td>
-                                <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal</td>
-                                <td class="border px-6 py-4 lg:w-[100px] hidden lg:table-cell">Status</td>
+                                <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Avatar</td>
+                                <td class="border px-6 py-4">username</td>
+                                <td class="border px-6 py-4">Role</td>
+                                <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal Daftar</td>
                                 <td class="border px-6 py-4 lg:w-[250px] w-[100px]">Aksi</td>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @if (count($getReseps) > 0)
-                                @foreach ($getReseps as $resep)
+                            @if (count($users) > 0)
+                                @foreach ($users as $user)
                                     <tr>
-                                        <td class="border px-6 py-4 text-center">
-                                            {{ $getReseps->firstItem() + $loop->index }}</td>
+                                        <td class="border px-6 py-4 text-center">{{ $loop->iteration }}</td>
                                         <td class="border px-6 py-4 hidden lg:table-cell">
-                                            <div class="w-32 h-20 mx-auto">
-                                                <img src="{{ asset('storage/assets/gambar/' . $resep->gambar) }}"
-                                                    class="w-full h-full md:w-32 max-w-full max-h-full"
-                                                    alt="nasi goreng rendang">
+                                            <div class="w-32 mx-auto">
+                                                @isset($user->avatar)
+                                                    <img src="{{ asset('storage/' . $user->avatar) }}"
+                                                        class="w-full md:w-32 max-w-full max-h-full" alt="">
+                                                @else
+                                                    <img src="{{ asset('storage/profile/default-profile.png') }}"
+                                                        class="w-full md:w-32 max-w-full max-h-full" alt="">
+                                                @endisset
                                             </div>
                                         </td>
                                         <td class="border px-6 py-4">
-                                            {{ $resep->nama_resep }}
-                                            <div class="block lg:hidden text-sm text-gray-500">
-                                                {{ $resep->status }} |
-                                                {{ $resep->created_at->isoFormat('dddd, D MMMM YYYY') }}
-                                            </div>
+                                            {{ $user->username }}
+                                        </td>
+                                        <td class="border px-6 py-4">
+                                            {{ $user->role }}
                                         </td>
                                         <td
                                             class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">
-                                            {{ $resep->created_at->isoFormat('dddd, D MMMM YYYY') }}</td>
-                                        <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">
-                                            <form action="{{ route('resep.status.update', $resep->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('PUT')
-                                                <select name="status" onchange="form.submit()"
-                                                    class="border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 loadingOther ">
-                                                    <option value="draft"
-                                                        {{ $resep->status == 'draft' ? 'selected' : '' }}>Draft
-                                                    </option>
-                                                    <option value="publish"
-                                                        {{ $resep->status == 'publish' ? 'selected' : '' }}>publish
-                                                    </option>
-                                                </select>
-                                            </form>
-                                        </td>
+                                            {{ $user->created_at->isoFormat('dddd, D MMMM YYYY') }}</td>
+
                                         <td class="border px-6 py-4">
                                             <div class="flex justify-center gap-2">
-                                                <a href='{{ route('resep.edit', $resep->id) }}'
+                                                <a href='{{ route('admin_users.edit', $user->id) }}'
                                                     class="block text-blue-600 hover:text-blue-400">
                                                     <div class="w-5 h-5">
                                                         <svg viewBox="0 0 24 24" fill="none"
@@ -114,29 +100,8 @@
                                                         </svg>
                                                     </div>
                                                 </a>
-                                                <a href='{{ route('resep.view', ['pembuat' => auth()->user()->username, 'id' => $resep->id]) }}'
-                                                    class="block text-blue-600 hover:text-blue-400">
-                                                    <div class="w-5 h-5">
-                                                        <svg viewBox="0 0 24 24" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                                stroke-linejoin="round"></g>
-                                                            <g id="SVGRepo_iconCarrier">
-                                                                <path d="M13 11L22 2M22 2H16.6562M22 2V7.34375"
-                                                                    stroke="rgb(22 163 74)" stroke-width="1.5"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                </path>
-                                                                <path
-                                                                    d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2.49073 19.5618 2.16444 18.1934 2.0551 16"
-                                                                    stroke="rgb(22 163 74)" stroke-width="1.5"
-                                                                    stroke-linecap="round"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </div>
-                                                </a>
-                                                <form action="{{ route('resep.destroy', $resep->id) }}" method="post"
-                                                    class="flex justify-center align-center">
+                                                <form action="{{ route('admin_users.destroy', $user->id) }}"
+                                                    method="post" class="flex justify-center align-center">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="block"
@@ -177,13 +142,14 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <th colspan="6" class="border px-6 py-4">Tidak ada resep</th>
+                                    <th colspan="6" class="border px-6 py-4">Tidak ada user</th>
                                 </tr>
                             @endif
                         </tbody>
                     </table>
-                    <div class="my-3">
-                        {{ $getReseps->appends(request()->query())->links() }}
+
+                    <div class="my-4">
+                        {{ $users->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
@@ -192,7 +158,7 @@
 
     @push('scripts')
         <script>
-            function confirmDelete(event) {
+            function confirmDelete() {
                 event.preventDefault(); // prevent form submit
                 var form = event.target.closest('form'); // storing the form
                 Swal.fire({

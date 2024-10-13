@@ -3,31 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resep;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PembuatController extends Controller
+class AllResepController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $getReseps = Resep::where('user_id', Auth::user()->id);
-
+        $user = Auth::user()->id;
+        $users = User::where('role', '!=', 'admin')->get();
+        $getReseps = Resep::where('user_id', '!=', $user);
         if ($request->q) {
             $getReseps->where('nama_resep', 'LIKE', '%' . $request->q . '%');
         }
-
+        if ($request->user) {
+            $getReseps->where('user_id', $request->user);
+        }
         if ($request->status) {
             $getReseps->where('status', $request->status);
         }
-
-        $getReseps = $getReseps->orderBy('created_at', 'desc')->paginate(2);
-
-        // return response()->json($getReseps);
-
-        return view('dashboard', compact('getReseps'));
+        $getReseps = $getReseps->orderBy('user_id', 'asc')->with('user')->paginate(1);
+        return view('admin.resep.all', compact('getReseps', 'users'));
     }
 
     /**
@@ -49,16 +49,9 @@ class PembuatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $pembuat)
+    public function show(string $id)
     {
-        $getReseps = Resep::query()->where('status', 'publish')->with('user:id,username')->whereHas('user', function ($query) use ($pembuat) {
-            $query->where('username', $pembuat);
-        })->get();
-
-        $getReseps->load(['tagItems' => function ($query) {
-            $query->take(3);
-        }, 'tagItems.tag']);
-        return view('beranda', compact('pembuat', 'getReseps'));
+        //
     }
 
     /**
@@ -74,7 +67,11 @@ class PembuatController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $resep = Resep::findOrFail($id);
+        $resep->update([
+            'status' => $request->status,
+        ]);
+        return redirect()->route('all_reseps.index')->with('success', 'Status Resep berhasil diubah');
     }
 
     /**
@@ -82,6 +79,8 @@ class PembuatController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $resep = Resep::findOrFail($id);
+        $resep->delete();
+        return redirect()->route('all_reseps.index')->with('success', 'Resep berhasil dihapus');
     }
 }

@@ -30,9 +30,11 @@ class ResepController extends Controller
         if ($request->q) {
             $query->where('nama_resep', 'LIKE', '%' . $request->q . '%');
         }
-
+        if (is_numeric($request->per_page)) {
+            $perPage = $request->input('per_page', 4);
+        }
         // Eksekusi query untuk mengambil resep
-        $getReseps = $query->orderBy('created_at', 'desc')->get();
+        $getReseps = $query->orderBy('created_at', 'desc')->paginate($perPage ?? 4);
 
 
         $getReseps->load(['tagItems' => function ($query) {

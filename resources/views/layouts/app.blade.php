@@ -132,6 +132,27 @@
         </script>
     @endif
 
+    <script>
+        function confirmLogout() {
+            event.preventDefault();
+            let form = event.target.closest('form');
+            Swal.fire({
+                title: "Apakah kamu yakin?",
+                text: "ingin keluar!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#333",
+                cancelButtonColor: "#c3c3c3",
+                confirmButtonText: "Lanjut",
+                cancelButtonText: "Batal",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    </script>
+
     @stack('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script> --}}
 </body>

@@ -12,7 +12,7 @@ class usersController extends Controller
         if ($request->q) {
             $users = User::where('username', 'LIKE', '%' . $request->q . '%')->orWhere('name', 'LIKE', '%' . $request->q . '%')->paginate(1);
         } else {
-            $users = User::paginate(1);
+            $users = User::paginate(10);
         }
         return view('admin.users', compact('users'));
     }

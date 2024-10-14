@@ -110,6 +110,10 @@
             const body = document.body;
             body.removeChild(document.getElementById('loading'));
         }
+
+        function loadingFunction() {
+            body.insertAdjacentHTML('beforeend', loadingTemplate);
+        }
     </script>
 
     @if (session('success'))

@@ -59,13 +59,13 @@
                         <a href="{{ route('resep.beranda') }}"
                             class="block py-2 pr-4 pl-3 @if (request()->routeIs('resep.beranda')) text-white rounded bg-blue-700 lg:bg-transparent lg:text-blue-700 lg:p-0
                                 @else
-                                text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 @endif ">Reseps</a>
+                                text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 @endif ">Resep</a>
                     </li>
                     <li>
                         <a href="{{ route('resep.tags.view') }}"
                             class="block py-2 pr-4 pl-3 @if (request()->routeIs('resep.tags.view')) text-white rounded bg-blue-700 lg:bg-transparent lg:text-blue-700 lg:p-0
                                 @else
-                                text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 @endif ">Tags</a>
+                                text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 @endif ">Tag</a>
                     </li>
                     @auth
                         <li>

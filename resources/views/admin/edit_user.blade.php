@@ -1,4 +1,4 @@
-<x-app-layout title="{{ __('Tambah Resep') }}">
+<x-app-layout title="{{ __('Edit User') }}">
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">

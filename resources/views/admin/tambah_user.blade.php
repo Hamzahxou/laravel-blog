@@ -1,4 +1,4 @@
-<x-app-layout title="{{ __('Tambah Resep') }}">
+<x-app-layout title="{{ __('Tambah User') }}">
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -23,7 +23,7 @@
                                 <x-text-input id="gambar" name="avatar" type="file"
                                     class="mt-1 p-2 block w-full border  border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none focus:border-2"
                                     accept="image/*" onchange="ImgPreview(this)" />
-                                <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
+                                <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
                             </div>
                             <div>
                                 <x-input-label for="nama" :value="__('Nama')" />

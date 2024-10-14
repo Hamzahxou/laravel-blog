@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AllResepController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CopyController;
 use App\Http\Controllers\PembuatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -22,6 +23,7 @@ Route::get('/tags/{tag}', [TagsController::class, 'show'])->name('resep.tag.view
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PembuatController::class, 'index'])->name('dashboard');
+    Route::post('copy/{id}', CopyController::class)->name('copy.resep');
     Route::prefix('sharing')->name('resep.')->group(function () {
         Route::get('/tambah', [ResepController::class, 'create'])->name('tambah');
         Route::post('/tambah', [ResepController::class, 'store'])->name('simpan');
@@ -44,10 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware(Admin::class)->group(function () {
-        Route::get('Tags', [TagsController::class, 'view'])->name('tags.view');
-        Route::put('Tags/{id}', [TagsController::class, 'update'])->name('tags.update');
-        Route::delete('Tags/{id}', [TagsController::class, 'destroy'])->name('tags.destroy');
-        Route::post('Tags', [TagsController::class, 'store'])->name('tags.store');
+        Route::get('admin_tags', [TagsController::class, 'view'])->name('tags.view');
+        Route::put('admin_tags/{id}', [TagsController::class, 'update'])->name('tags.update');
+        Route::delete('admin_tags/{id}', [TagsController::class, 'destroy'])->name('tags.destroy');
+        Route::post('admin_tags', [TagsController::class, 'store'])->name('tags.store');
 
         Route::resource('admin_users', UsersController::class);
 

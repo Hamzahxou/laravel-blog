@@ -1,4 +1,4 @@
-<x-app-layout title="{{ __('Tambah Resep') }}">
+<x-app-layout title="{{ __('Daftar Tags') }}">
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -187,7 +187,7 @@
                 const {
                     value: text
                 } = await Swal.fire({
-                    input: "textarea",
+                    input: "text",
                     inputLabel: "Ubah Tags",
                     inputValue: comment,
                     inputPlaceholder: "ketik disini...",
@@ -218,7 +218,7 @@
                 const {
                     value: text
                 } = await Swal.fire({
-                    input: "textarea",
+                    input: "text",
                     inputLabel: "Tambah Tags",
                     inputValue: comment,
                     inputPlaceholder: "ketik disini...",

@@ -26,7 +26,7 @@ class AllResepController extends Controller
         if ($request->status) {
             $getReseps->where('status', $request->status);
         }
-        $getReseps = $getReseps->orderBy('user_id', 'asc')->with('user')->paginate(1);
+        $getReseps = $getReseps->orderBy('user_id', 'asc')->with('user')->paginate(10);
         return view('admin.resep.all', compact('getReseps', 'users'));
     }
 

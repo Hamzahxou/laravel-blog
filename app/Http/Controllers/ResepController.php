@@ -28,7 +28,8 @@ class ResepController extends Controller
 
         // Filter pencarian berdasarkan nama resep jika ada
         if ($request->q) {
-            $query->where('nama_resep', 'LIKE', '%' . $request->q . '%');
+            $q = $request->q;
+            $query->where('nama_resep', 'LIKE', '%' . $q . '%');
         }
         if (is_numeric($request->per_page)) {
             $perPage = $request->input('per_page', 4);

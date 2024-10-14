@@ -23,7 +23,7 @@ class PembuatController extends Controller
             $getReseps->where('status', $request->status);
         }
 
-        $getReseps = $getReseps->orderBy('created_at', 'desc')->paginate(2);
+        $getReseps = $getReseps->orderBy('created_at', 'desc')->paginate(10);
 
         // return response()->json($getReseps);
 
@@ -49,15 +49,21 @@ class PembuatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $pembuat)
+    public function show(Request $request, string $pembuat)
     {
-        $getReseps = Resep::query()->where('status', 'publish')->with('user:id,username')->whereHas('user', function ($query) use ($pembuat) {
-            $query->where('username', $pembuat);
-        })->get();
+        $user = $request->pembuat;
 
-        $getReseps->load(['tagItems' => function ($query) {
+        if (is_numeric($request->per_page)) {
+            $perPage = $request->input('per_page', 4);
+        }
+
+        $getReseps = Resep::query()->where('status', 'publish')->with('user:id,username')->whereHas('user', function ($query) use ($user) {
+            $query->where('username', $user);
+        })->with(['tagItems' => function ($query) {
             $query->take(3);
-        }, 'tagItems.tag']);
+        }, 'tagItems.tag'])->paginate($perPage ?? 4);
+
+
         return view('beranda', compact('pembuat', 'getReseps'));
     }
 

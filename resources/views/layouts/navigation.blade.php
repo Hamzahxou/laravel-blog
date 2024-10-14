@@ -15,7 +15,7 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('resep.beranda')" :active="request()->routeIs('resep.beranda')">
-                        {{ __('Reseps') }}
+                        {{ __('Daftar Resep') }}
                     </x-nav-link>
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -26,13 +26,13 @@
                         </x-nav-link>
                         @if (auth()->user()->role == 'admin')
                             <x-nav-link :href="route('admin_users.index')" :active="request()->routeIs('admin_users.index')">
-                                {{ __('Users') }}
+                                {{ __('Pengguna') }}
                             </x-nav-link>
                             <x-nav-link :href="route('all_reseps.index')" :active="request()->routeIs('all_reseps.index')">
-                                {{ __('All Reseps') }}
+                                {{ __('Daftar Resep user') }}
                             </x-nav-link>
                             <x-nav-link :href="route('tags.view')" :active="request()->routeIs('tags.view')">
-                                {{ __('Tags') }}
+                                {{ __('Tag') }}
                             </x-nav-link>
                         @endif
                     @else
@@ -123,7 +123,7 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('resep.beranda')" :active="request()->routeIs('resep.beranda')">
-                {{ __('Reseps') }}
+                {{ __('Daftar Resep') }}
             </x-responsive-nav-link>
             @auth
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -134,13 +134,13 @@
                 </x-responsive-nav-link>
                 @if (auth()->user()->role == 'admin')
                     <x-responsive-nav-link :href="route('admin_users.index')" :active="request()->routeIs('admin_users.index')">
-                        {{ __('Users') }}
+                        {{ __('Pengguna') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('all_reseps.index')" :active="request()->routeIs('all_reseps.index')">
-                        {{ __('All Reseps') }}
+                        {{ __('Daftar Resep user') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('tags.view')" :active="request()->routeIs('tags.view')">
-                        {{ __('Tags') }}
+                        {{ __('Tag') }}
                     </x-responsive-nav-link>
                 @endif
             @else

@@ -1,6 +1,4 @@
 <x-app-layout :headerApp=false title="Resep">
-
-
     <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
     </div>
 
@@ -130,12 +128,14 @@
             <h1 class="text-slate-600 text-large">Tidak ada resep</h1>
         @endif
     </div>
-    @if (count($getReseps) > 0)
-        <div class="flex justify-center items-center pb-12 flex-wrap mx-auto gap-2">
-            <form action="{{ route('resep.beranda') }}" method="GET">
-                <input type="hidden" name="per_page" value="{{ $getReseps->count() + 2 }}">
-                <x-primary-button type="submit">Tampilkan lebih banyak</x-primary-button>
-            </form>
-        </div>
+    @if (count($getReseps) > 4)
+        @if (!request()->q)
+            <div class="flex justify-center items-center pb-12 flex-wrap mx-auto gap-2">
+                <form action="{{ request()->fullUrl() }}" method="GET">
+                    <input type="hidden" name="per_page" value="{{ $getReseps->count() + 2 }}">
+                    <x-primary-button type="submit">Tampilkan lebih banyak</x-primary-button>
+                </form>
+            </div>
+        @endif
     @endif
 </x-app-layout>

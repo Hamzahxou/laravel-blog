@@ -52,10 +52,10 @@
                                 <td class="border px-6 py-4 w-[80px]">No</td>
                                 <td class="border px-6 py-4">Username</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Gambar</td>
-                                <td class="border px-6 py-4">Judul</td>
+                                <td class="border px-6 py-4 lg:w-[250px]">Judul</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal</td>
                                 <td class="border px-6 py-4 lg:w-[100px] hidden lg:table-cell">Status</td>
-                                <td class="border px-6 py-4 lg:w-[250px] w-[100px]">Aksi</td>
+                                <td class="border px-6 py-4 w-[100px]">Aksi</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -146,7 +146,7 @@
                                                         </svg>
                                                     </div>
                                                 </a>
-                                                <form action="{{ route('all_reseps.destroy', $resep->id) }}"
+                                                {{-- <form action="{{ route('all_reseps.destroy', $resep->id) }}"
                                                     method="post" class="flex justify-center align-center">
                                                     @csrf
                                                     @method('DELETE')
@@ -181,7 +181,7 @@
                                                             </svg>
                                                         </div>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>

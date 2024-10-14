@@ -42,6 +42,11 @@ class TagsController extends Controller
     public function update(Request $request, string $id)
     {
         $tag = Tags::findOrFail($id);
+        if ($request->nama_tag != $tag->nama_tag) {
+            $request->validate([
+                'nama_tag' => ['required', 'string', 'max:255', 'unique:tags,nama_tag'],
+            ]);
+        }
         $tag->update([
             'nama_tag' => $request->nama_tag,
         ]);

@@ -278,6 +278,7 @@
                     cancelButtonText: 'Tidak'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        loadingFunction()
                         form.submit();
                     }
                 });
@@ -311,6 +312,7 @@
                 });
                 if (text) {
                     form.querySelector("input[name='content']").value = text;
+                    loadingFunction()
                     form.submit();
                 }
             }

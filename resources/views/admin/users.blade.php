@@ -67,8 +67,17 @@
                                         <td class="border px-6 py-4">
                                             {{ $user->username }}
                                         </td>
-                                        <td class="border px-6 py-4">
-                                            {{ $user->role }}
+                                        <td class="border px-6 py-4 text-center">
+                                            @if ($user->role == 'admin')
+                                                <div
+                                                    class="inline-flex items-center px-3 py-1 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest">
+                                                    Admin</div>
+                                            @else
+                                                <div
+                                                    class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm">
+                                                    Chef</div>
+                                            @endif
+
                                         </td>
                                         <td
                                             class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">

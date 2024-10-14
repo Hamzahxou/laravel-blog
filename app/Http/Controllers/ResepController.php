@@ -68,15 +68,13 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
-
-
         $request->validate([
             'nama_resep' => ['required', 'string', 'max:255'],
             'gambar' => ['required', 'mimes:png,jpg,jpeg'],
             'deskripsi' => ['required', 'string', 'min:10'],
             'content' => ['required', 'string'],
             'status' => ['required', 'string', 'max:255'],
-            'tags' => ['required'],
+            // 'tags' => ['required'],
         ]);
 
         $gambar = $request->file('gambar');
@@ -156,7 +154,7 @@ class ResepController extends Controller
             'deskripsi' => ['required', 'string', 'min:10'],
             'content' => ['required', 'string'],
             'status' => ['required', 'string', 'max:255'],
-            'tags' => ['required'],
+            // 'tags' => ['required'],
         ]);
 
         $nama_gambar = $request->old_gambar;
@@ -239,6 +237,7 @@ class ResepController extends Controller
     {
         $getResep = Resep::where('id', $id)->where('user_id', Auth::user()->id)->first();
         $getResep->delete();
+
         return redirect()->route('dashboard')->with('success', 'Resep berhasil dihapus');
     }
 
@@ -248,6 +247,7 @@ class ResepController extends Controller
         $getResep->update([
             'status' => $request->status
         ]);
+
         return redirect()->route('dashboard')->with('success', 'Status Resep berhasil diubah');
     }
 }

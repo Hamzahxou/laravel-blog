@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 
 Route::get('/', fn() => redirect('resep'));
-Route::get('/resep', [ResepController::class, 'index'])->name('resep.beranda');
+Route::get('/resep', [ResepController::class, 'index'])->whereNumber('per_page')->name('resep.beranda');
 Route::get('/resep/{pembuat}', [PembuatController::class, 'show'])->name('resep.pembuat.view');
 Route::get('/resep/{pembuat}/{id}', [ResepController::class, 'show'])->name('resep.view');
 Route::get('/tags', [TagsController::class, 'index'])->name('resep.tags.view');
@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('resep/{id}/comment', [CommentController::class, 'destroy'])->name('comment.delete');
     Route::put('resep/{id}/comment/update', [CommentController::class, 'update'])->name('comment.update');
 
-    Route::post('resep/reply/{id}/comment', [ReplyController::class, 'store'])->name('comment.reply.store');
+    Route::post('resep/reply/{id}/  comment', [ReplyController::class, 'store'])->name('comment.reply.store');
     Route::delete('resep/reply/{id}/comment', [ReplyController::class, 'destroy'])->name('comment.reply.delete');
     Route::put('resep/reply/{id}/comment/update', [ReplyController::class, 'update'])->name('comment.reply.update');
 

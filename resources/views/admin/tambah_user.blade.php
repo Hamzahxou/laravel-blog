@@ -75,12 +75,15 @@
 
         <script>
             const usernames = @json($get_all_username);
-            const users = usernames.map(user => user.username);
+            const users = usernames.map(user => user.username.toLowerCase());
 
             function checkUsername(value) {
+
                 const view_alert = document.getElementById('view_alert')
                 if (value.length > 0) {
                     if (users.includes(value.toLowerCase().trim())) {
+                        console.table(usernames)
+                        console.log(value, users.includes(value.toLowerCase().trim()));
                         view_alert.innerHTML =
                             "<i class='text-sm text-red-600 space-y-1'>Username Tidak Tersedia</i>"
                     } else {

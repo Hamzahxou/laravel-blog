@@ -128,7 +128,7 @@
             <h1 class="text-slate-600 text-large">Tidak ada resep</h1>
         @endif
     </div>
-    @if (count($getReseps) > 4)
+    @if (count($getReseps) > 3 && request()->per_page < $jumlah)
         @if (!request()->q)
             <div class="flex justify-center items-center pb-12 flex-wrap mx-auto gap-2">
                 <form action="{{ request()->fullUrl() }}" method="GET">

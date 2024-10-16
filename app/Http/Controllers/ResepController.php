@@ -48,9 +48,9 @@ class ResepController extends Controller
         // return response()->json($getReseps);
 
         // Mengembalikan view dengan data resep
-
+        $jumlah = Resep::where('status', 'publish')->get()->count();
         $getLatestReseps = Resep::where('status', 'publish')->orderBy('created_at', 'desc')->take(5)->get(['id', 'gambar']);
-        return view('beranda', compact('getReseps', 'getLatestReseps'));
+        return view('beranda', compact('getReseps', 'getLatestReseps', 'jumlah'));
     }
 
 

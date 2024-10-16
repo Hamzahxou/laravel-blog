@@ -125,7 +125,7 @@
     @push('scripts')
         <script>
             const usernames = @json($get_all_username);
-            const users = usernames.map(user => user.username);
+            const users = usernames.map(user => user.username.toLowerCase());
 
             function checkUsername(value) {
                 const view_alert = document.getElementById('view_alert')
